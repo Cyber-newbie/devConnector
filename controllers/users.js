@@ -10,8 +10,9 @@ env.config({
 })
 
 const getAllUsers = (req, res) => {
+    req.body.id = 123
     res.json({
-        msg: 'users'
+        msg: req.body
     })
 }
 
