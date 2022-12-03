@@ -8,12 +8,14 @@ const UserSchema = new Schema({
     },
     email: {
         type: String,
-        required: [true, 'enter your email'],
+        required: true,
+        validate: v => Array.isArray(v) && v.length > 0,
         unique: true
     },
     password: {
         type: String,
-        required: [true, 'enter your password']
+        required: true,
+        validate: v => Array.isArray(v) && v.length > 0
     },
     avatar: {
         type: String,

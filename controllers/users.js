@@ -64,35 +64,57 @@ const registerUser = async (req, res) => {
 }
 
 const loginUser = async (req, res) => {
-    const {
-        email,
-        password
-    } = req.body
-    const user = await User.findOne({
-        email
-    })
-    if (!user) {
-        res.status(400).json({
-            msg: 'user not found'
+    try {
+        const {
+            email,
+            password
+        } = req.body
+        const user = await User.findOne({
+            email
         })
-    }
-    const isMatch = await bcrypt.compare(password, user.password)
-    if (isMatch) {
-        const payload = {
-            id: user.id,
-            name: user.name
+        if (!user) {
+            return res.status(400).json({
+                msg: 'user not found'
+            })
         }
-        const token = jwt.sign(payload, process.env.SECRET_KEY, {
-            expiresIn: 3600
-        })
-        res.status(200).json({
-            msg: 'logged in',
-            token: `Bearer ${token}`
-        })
-    } else {
-        res.status(400).json({
-            msg: 'incorrect password'
-        })
+        const isMatch = await bcrypt.compare(password, user.password)
+        if (isMatch) {
+            const payload = {
+                id: user.id,
+                name: user.name
+            }
+            const token = jwt.sign(payload, process.env.SECRET_KEY, {
+                expiresIn: 3600
+            })
+            return res.status(200).json({
+                msg: 'logged in',
+                token: `Bearer ${token}`
+            })
+        } else {
+            return res.status(400).json({
+                msg: 'incorrect password'
+            })
+        }
+    } catch (error) {
+        // let errors = {}
+        // if (error.name === "ValidationError") {
+        //     Object.keys(error.errors).forEach((key) => {
+        //         errors[key] = error.errors[key].message;
+        //     });
+
+        //     // if (errors.skills) {
+        //     //     errors.skills = 'please enter your skills'
+        //     // }
+
+        //     // if (errors.website) {
+        //     //     errors.website = 'invalid url'
+        //     // }
+
+        //     return res.status(400).json(errors)
+
+        // }
+        res.status(500).json(error);
+        // console.log(error);
     }
 }
 

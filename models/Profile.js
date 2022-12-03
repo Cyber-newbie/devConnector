@@ -1,6 +1,9 @@
 const mongoose = require('mongoose');
-const Validator = require('validator');
 const Schema = mongoose.Schema;
+const {
+    isUrl
+} = require('../middleware/validate')
+
 // Create Schema
 const ProfileSchema = new Schema({
     user: {
@@ -10,13 +13,15 @@ const ProfileSchema = new Schema({
     handle: {
         type: String,
         required: [true, 'please enter handle'],
-        max: 40
+        unique: [true, 'handle already exists'],
+        max: 40,
     },
     company: {
         type: String
     },
     website: {
         type: String,
+        validate: isUrl
     },
     location: {
         type: String
@@ -38,7 +43,7 @@ const ProfileSchema = new Schema({
     experience: [{
         title: {
             type: String,
-            required: true
+            required: [true, 'please enter title field!']
         },
         company: {
             type: String,
@@ -92,19 +97,24 @@ const ProfileSchema = new Schema({
     }],
     social: {
         youtube: {
-            type: String
+            type: String,
+            validate: isUrl
         },
         twitter: {
-            type: String
+            type: String,
+            validate: isUrl
         },
         facebook: {
-            type: String
+            type: String,
+            validate: isUrl
         },
         linkedin: {
-            type: String
+            type: String,
+            validate: isUrl
         },
         instagram: {
-            type: String
+            type: String,
+            validate: isUrl
         }
     },
     date: {
