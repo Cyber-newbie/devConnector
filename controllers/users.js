@@ -37,7 +37,12 @@ const registerUser = async (req, res) => {
             avatar,
             password: req.body.password
         })
+
         try {
+            // if(newUser.password == null){
+            //     console.log('password is null');
+            // }
+            console.log(`password is ${newUser.password}`)
             const salt = await bcrypt.genSalt(10)
             const hashedPassword = await bcrypt.hash(newUser.password, salt)
             newUser.password = hashedPassword
@@ -47,17 +52,20 @@ const registerUser = async (req, res) => {
                 user
             })
         } catch (error) {
+            let errors = {};
             if (error.name === "ValidationError") {
-                let errors = {};
-
                 Object.keys(error.errors).forEach((key) => {
                     errors[key] = error.errors[key].message;
                 });
-
+                if (newUser.password == undefined) {
+                    errors.password = "password field is required"
+                }
                 return res.status(400).json(errors);
             }
+
             res.status(500).json({
-                msg: "Something went wrong"
+                errors,
+                error
             });
         }
     }
