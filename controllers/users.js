@@ -37,7 +37,12 @@ const registerUser = async (req, res) => {
             avatar,
             password: req.body.password
         })
+
         try {
+            // if(newUser.password == null){
+            //     console.log('password is null');
+            // }
+            console.log(`password is ${newUser.password}`)
             const salt = await bcrypt.genSalt(10)
             const hashedPassword = await bcrypt.hash(newUser.password, salt)
             newUser.password = hashedPassword
@@ -47,17 +52,20 @@ const registerUser = async (req, res) => {
                 user
             })
         } catch (error) {
+            let errors = {};
             if (error.name === "ValidationError") {
-                let errors = {};
-
                 Object.keys(error.errors).forEach((key) => {
                     errors[key] = error.errors[key].message;
                 });
-
+                if (newUser.password == undefined) {
+                    errors.password = "password field is required"
+                }
                 return res.status(400).json(errors);
             }
+
             res.status(500).json({
-                msg: "Something went wrong"
+                errors,
+                error
             });
         }
     }
@@ -74,7 +82,7 @@ const loginUser = async (req, res) => {
         })
         if (!user) {
             return res.status(400).json({
-                msg: 'user not found'
+                email: 'Incorrect email'
             })
         }
         const isMatch = await bcrypt.compare(password, user.password)
@@ -92,7 +100,7 @@ const loginUser = async (req, res) => {
             })
         } else {
             return res.status(400).json({
-                msg: 'incorrect password'
+                password: 'Incorrect password'
             })
         }
     } catch (error) {
@@ -113,7 +121,9 @@ const loginUser = async (req, res) => {
         //     return res.status(400).json(errors)
 
         // }
-        res.status(500).json(error);
+        res.status(500).json({
+            msg: "Something went wrong"
+        });
         // console.log(error);
     }
 }

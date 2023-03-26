@@ -6,6 +6,7 @@ const router = require('./routes/api/users')
 const profileRouter = require('./routes/api/profile')
 const postRouter = require('./routes/api/posts')
 const route = require('./middleware/route')
+const cors = require('cors');
 
 
 //load dotenv variables
@@ -16,7 +17,7 @@ env.config({
 connectDB()
 
 const app = express();
-
+app.use(cors());
 app.use(passport.initialize())
 require('./middleware/passport')(passport)
 

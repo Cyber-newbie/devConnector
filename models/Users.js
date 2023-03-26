@@ -1,6 +1,5 @@
 const mongoose = require('mongoose')
 const Schema = mongoose.Schema
-
 const UserSchema = new Schema({
     name: {
         type: String,
@@ -9,13 +8,14 @@ const UserSchema = new Schema({
     email: {
         type: String,
         required: true,
-        validate: v => Array.isArray(v) && v.length > 0,
+        // validate: v => v.length > 0,
         unique: true
     },
     password: {
         type: String,
         required: true,
-        validate: v => Array.isArray(v) && v.length > 0
+        set: value => value === '' ? undefined : value,
+        validate: v => v.length > 0
     },
     avatar: {
         type: String,
