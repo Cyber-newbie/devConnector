@@ -2,24 +2,28 @@
 import { useRef } from "react";
 import { connect } from "react-redux";
 import { loginUser } from "../../actions/authActions";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 import isEmpty from "../../validation/is-empty";
+import TextFieldGroup from "../common/TextFieldGroup";
 const Login = (props) => {
   const navigate = useNavigate();
   const { isAuthenticated } = props.auth;
   useEffect(() => {
     if (isAuthenticated) {
+      console.log("navigating");
       navigate("/dashboard");
     }
     console.log(isAuthenticated);
-  });
+    // navigate("/dashboard");
+  }, [isAuthenticated]);
 
   const emailInput = useRef(null);
   const pswInput = useRef(null);
   const [errors, setErrors] = useState({});
 
   const emailHandler = (e) => {
+    console.log("handling");
     emailInput.current.value = e.target.value;
   };
 
@@ -44,12 +48,7 @@ const Login = (props) => {
     }
   };
 
-  const isPassword = errors.password
-    ? "form-control form-control-lg is-invalid"
-    : "form-control form-control-lg";
-  const isEmail = errors.email
-    ? "form-control form-control-lg is-invalid"
-    : "form-control form-control-lg";
+  const memoizedErrors = useMemo(() => errors, [errors]);
 
   return (
     <div className="login">
@@ -61,32 +60,24 @@ const Login = (props) => {
               Sign into your DevConnect account
             </p>
             <form onSubmit={submitHandler}>
-              <div className="form-group">
-                <input
-                  type="email"
-                  className={isEmail}
-                  placeholder="Email"
-                  name="email"
-                  ref={emailInput}
-                  onChange={emailHandler}
-                />
-                {errors.email && (
-                  <small className="invalid-feedback">{errors.email}</small>
-                )}
-              </div>
-              <div className="form-group">
-                <input
-                  type="password"
-                  className={isPassword}
-                  placeholder="password"
-                  name="password"
-                  ref={pswInput}
-                  onChange={pswdHandler}
-                />
-                {errors.password && (
-                  <small className="invalid-feedback">{errors.password}</small>
-                )}
-              </div>
+              <TextFieldGroup
+                type="email"
+                name="email"
+                placeholder="Email"
+                ref={emailInput}
+                onChange={emailHandler}
+                error={memoizedErrors.email}
+              />
+
+              <TextFieldGroup
+                type="password"
+                name="password"
+                placeholder="password"
+                ref={pswInput}
+                onChange={pswdHandler}
+                error={memoizedErrors.password}
+              />
+
               <input type="submit" className="btn btn-info btn-block mt-4" />
             </form>
           </div>

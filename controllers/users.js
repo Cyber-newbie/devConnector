@@ -41,7 +41,7 @@ const registerUser = async (req, res) => {
         try {
             // if(newUser.password == null){
             //     console.log('password is null');
-            // }
+            // }    
             console.log(`password is ${newUser.password}`)
             const salt = await bcrypt.genSalt(10)
             const hashedPassword = await bcrypt.hash(newUser.password, salt)
@@ -89,7 +89,8 @@ const loginUser = async (req, res) => {
         if (isMatch) {
             const payload = {
                 id: user.id,
-                name: user.name
+                name: user.name,
+                avatar: user.avatar
             }
             const token = jwt.sign(payload, process.env.SECRET_KEY, {
                 expiresIn: 3600

@@ -11,16 +11,14 @@ const getProfile = async (req, res) => {
                 profile
             })
         } else {
-            res.status(404).json({
-                msg: 'profile not found'
-            })
+            res.status(404).json({})
         }
     } catch (error) {
         res.json({
             error
         })
     }
-    console.log(req.user.id);
+
 
 }
 

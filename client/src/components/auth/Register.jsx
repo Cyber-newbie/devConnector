@@ -3,7 +3,7 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { connect } from "react-redux";
 import { registerUser } from "../../actions/authActions";
-// import axios from 'axios'
+import TextFieldGroup from "../common/TextFieldGroup";
 
 const Register = (props) => {
   const navigate = useNavigate();
@@ -50,20 +50,11 @@ const Register = (props) => {
     }
 
     props.registerUser(data);
-    localStorage.setItem("success", true);
-    // const user = await fetch("http://localhost:5000/api/users/register", {
-    //   method: "POST",
-    //   headers: {
-    //     "Content-type": "application/json; charset=UTF-8",
-    //     "Access-Control-Allow-Origin": "*",
-    //     "Access-Control-Allow-Credentials": true,
-    //   },
-    //   body: JSON.stringify(data),
-    //   // mode: "no-cors",
-    // });
-    // const created = await user.json();
+
     if (props.error) {
       setErrors({ ...props.error });
+    } else {
+      localStorage.setItem("success", true);
     }
     console.log(props.error);
     nameInput.current.value = "";
@@ -71,12 +62,6 @@ const Register = (props) => {
     pswInput.current.value = "";
     pswInput2.current.value = "";
   };
-  const isName = errors.name
-    ? "form-control form-control-lg is-invalid"
-    : "form-control form-control-lg";
-  const isEmail = errors.email
-    ? "form-control form-control-lg is-invalid"
-    : "form-control form-control-lg";
 
   return (
     <div className="register">
@@ -86,50 +71,41 @@ const Register = (props) => {
             <h1 className="display-4 text-center">Sign Up</h1>
             <p className="lead text-center">Create your DevConnector account</p>
             <form onSubmit={submitHandler}>
-              <div className="form-group">
-                <input
-                  type="text"
-                  className={isName}
-                  placeholder="Name"
-                  name="name"
-                  ref={nameInput}
-                  onChange={nameHandler}
-                />
-              </div>
-              <div className="form-group">
-                <input
-                  type="email"
-                  className={isEmail}
-                  placeholder="Email Address"
-                  name="email"
-                  ref={emailInput}
-                  onChange={emailHandler}
-                />
-                <small className="form-text text-muted">
-                  This site uses Gravatar so if you want a profile image, use a
-                  Gravatar email
-                </small>
-              </div>
-              <div className="form-group">
-                <input
-                  type="password"
-                  className="form-control form-control-lg"
-                  placeholder="Password"
-                  name="password"
-                  ref={pswInput}
-                  onChange={pswdHandler}
-                />
-              </div>
-              <div className="form-group">
-                <input
-                  type="password"
-                  className="form-control form-control-lg"
-                  placeholder="Confirm Password"
-                  name="password2"
-                  ref={pswInput2}
-                  onChange={pswd2Handler}
-                />
-              </div>
+              <TextFieldGroup
+                placeholder="Name"
+                name="name"
+                ref={nameInput}
+                onChange={nameHandler}
+                error={errors.name}
+              />
+
+              <TextFieldGroup
+                type="email"
+                placeholder="Email Address"
+                name="email"
+                ref={emailInput}
+                onChange={emailHandler}
+                error={errors.email}
+                info="This site uses Gravatar so if you want a profile image, use a
+               Gravatar email"
+              />
+
+              <TextFieldGroup
+                placeholder="Password"
+                name="password"
+                ref={pswInput}
+                onChange={pswdHandler}
+                type="password"
+              />
+
+              <TextFieldGroup
+                placeholder="Confirm Password"
+                name="password"
+                ref={pswInput2}
+                onChange={pswd2Handler}
+                type="password"
+              />
+
               <input type="submit" className="btn btn-info btn-block mt-4" />
             </form>
           </div>
