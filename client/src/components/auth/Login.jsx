@@ -6,6 +6,7 @@ import { useState, useEffect, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 import isEmpty from "../../validation/is-empty";
 import TextFieldGroup from "../common/TextFieldGroup";
+let i = 0;
 const Login = (props) => {
   const navigate = useNavigate();
   const { isAuthenticated } = props.auth;
@@ -14,7 +15,8 @@ const Login = (props) => {
       console.log("navigating");
       navigate("/dashboard");
     }
-    console.log(isAuthenticated);
+    // console.log(isAuthenticated);
+    console.log(i++);
     // navigate("/dashboard");
   }, [isAuthenticated]);
 

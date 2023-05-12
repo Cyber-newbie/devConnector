@@ -17,6 +17,7 @@ import Login from "./components/auth/Login";
 import Register from "./components/auth/Register";
 import store from "./store";
 import Dashboard from "./components/dashboard/Dashboard";
+import CreateProfile from "./components/create-profile/CreateProfile";
 import PrivateRoute from "./components/common/PrivateRoute";
 
 //check token and then set the user
@@ -48,24 +49,8 @@ function App() {
           <Route exact path="/" element={<Landing />} />{" "}
           <Route path="/login" element={<Login />} />{" "}
           <Route path="/register" element={<Register />} />{" "}
-          <Route
-            path="/dashboard"
-            element={
-              isAuthenticated ? <Dashboard /> : <Navigate to={"/login"} />
-            }
-          />{" "}
-          {/* <Route
-            path="/dashboard"
-            element={
-              isAuthenticated ? <Dashboard /> : <Navigate to={"/login"} />
-            }
-          /> */}
-          {/* {isAuthenticated ? (
-            <Route path="/dashboard" element={<Dashboard />} />
-          ) : (
-            <Route path="/login" element={<Login />} />
-          )} */}
-          {/* <PrivateRoute exact path="/dashboard" element={<Dashboard />} /> */}
+          <Route path="/dashboard" element={<Dashboard />} />{" "}
+          <Route path="/create-profile" element={<CreateProfile />} />{" "}
         </Routes>{" "}
         <Footer />
       </Router>{" "}

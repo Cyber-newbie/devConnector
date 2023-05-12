@@ -1,14 +1,21 @@
 import { connect } from "react-redux";
 import { getCurrentProfile } from "../../actions/profileActions";
+import { useNavigate } from "react-router-dom";
 import { Component, useEffect } from "react";
 import Spinner from "../common/Spinner";
 import { Link } from "react-router-dom";
 const Dashboad = (props) => {
+  const navigate = useNavigate();
   const { getCurrentProfile } = props;
+  const { isAuthenticated } = props.auth;
   useEffect(() => {
-    getCurrentProfile();
-    console.log("profiling");
-  });
+    if (!isAuthenticated) {
+      navigate("/login");
+    } else {
+      getCurrentProfile();
+      console.log("profiling");
+    }
+  }, []);
   const { user } = props.auth;
   const { profile, loading } = props.profile;
   let dashboardContent;
