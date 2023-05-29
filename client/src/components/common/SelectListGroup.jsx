@@ -1,6 +1,6 @@
 import { forwardRef } from "react";
 import classnames from "classnames";
-const SelectFieldGroup = forwardRef((props, ref) => {
+const SelectListFieldGroup = forwardRef((props, ref) => {
   const selectedOptions = props.options.map((option) => (
     <option key={option.label} value={option.value}>
       {option.label}
@@ -27,4 +27,4 @@ const SelectFieldGroup = forwardRef((props, ref) => {
   );
 });
 
-export default SelectFieldGroup;
+export default SelectListFieldGroup;

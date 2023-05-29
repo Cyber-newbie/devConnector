@@ -1,7 +1,7 @@
 import { connect } from "react-redux";
 import { getCurrentProfile } from "../../actions/profileActions";
 import { useNavigate } from "react-router-dom";
-import { Component, useEffect } from "react";
+import { useEffect } from "react";
 import Spinner from "../common/Spinner";
 import { Link } from "react-router-dom";
 const Dashboad = (props) => {

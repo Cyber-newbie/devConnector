@@ -103,11 +103,13 @@ const userProfile = async (req, res) => {
 
     // Social
     profileFields.social = {};
+
     if (req.body.youtube) profileFields.social.youtube = req.body.youtube;
     if (req.body.twitter) profileFields.social.twitter = req.body.twitter;
     if (req.body.facebook) profileFields.social.facebook = req.body.facebook;
     if (req.body.linkedin) profileFields.social.linkedin = req.body.linkedin;
     if (req.body.instagram) profileFields.social.instagram = req.body.instagram;
+    console.log(profileFields.social.youtube);
     try {
         const profile = await Profile.findOne({
             user: req.user.id
@@ -156,6 +158,31 @@ const userProfile = async (req, res) => {
 
             if (errors.website) {
                 errors.website = 'invalid url'
+            }
+
+            if (errors["social.twitter"]) {
+                errors["social.twitter"] = 'invalid twitter url'
+
+            }
+
+            if (errors["social.youtube"]) {
+                errors["social.youtube"] = 'invalid youtube url'
+
+            }
+
+            if (errors["social.linkedin"]) {
+                errors["social.linkedin"] = 'invalid linkedin url'
+
+            }
+
+            if (errors["social.facebook"]) {
+                errors["social.facebook"] = 'invalid facebook url'
+
+            }
+
+            if (errors["social.instagram"]) {
+                errors["social.instagram"] = 'invalid instagram url'
+
             }
 
             return res.status(400).json(errors)
