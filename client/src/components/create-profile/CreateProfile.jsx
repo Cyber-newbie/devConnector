@@ -12,13 +12,14 @@ const CreateProfile = (props) => {
   const { profile } = props.profile;
   const { getCurrentProfile } = props;
   const [submit, setSubmit] = useState(false);
+  const [hasDesiredErrors, setHasDesiredErrors] = useState(false);
 
   // console.log(profile);
   useEffect(() => {
     console.log(`${submit} before if block`);
     if (submit === true) {
       getCurrentProfile();
-      navigate("/dashboard");
+      // navigate("/dashboard");
       console.log("prof cond");
     }
 
@@ -28,6 +29,15 @@ const CreateProfile = (props) => {
     //   console.log("navigating to dashboard");
     // }
   }, [submit]);
+
+  // useEffect(() => {
+  //   if (submit) {
+  //     // Perform actions when submit is true
+  //     getCurrentProfile();
+  //     navigate("/dashboard");
+  //     console.log("prof cond");
+  //   }
+  // }, [submit]);
 
   const handle = useRef(null);
   const company = useRef(null);
@@ -130,19 +140,15 @@ const CreateProfile = (props) => {
     }
     console.log(profile);
 
-    if (
-      !errors.hasOwnProperty("status") ||
-      !errors.hasOwnProperty("handle") ||
-      !errors.hasOwnProperty("skills")
-    ) {
+    if (!errors["status"] || !errors["handle"] || !errors["skills"]) {
       setSubmit(true);
       console.log("setting submit");
     }
 
     console.log(errors["status"]);
-    console.log(submit);
   };
 
+  console.log(submit);
   // Select options for status
   const options = [
     { label: "* Select Professional Status", value: "" },
