@@ -16,6 +16,7 @@ const SelectListFieldGroup = forwardRef((props, ref) => {
         name={props.name}
         onChange={props.onChange}
         ref={ref}
+        value={props.value}
       >
         {selectedOptions}
       </select>

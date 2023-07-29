@@ -16,6 +16,7 @@ const InputGroup = forwardRef((props, ref) => {
         name={props.name}
         onChange={props.onChange}
         ref={ref}
+        defaultValue={props.defaultValue}
       />
       {props.error && <div className="invalid-feedback">{props.error}</div>}
     </div>

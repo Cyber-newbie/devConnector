@@ -19,6 +19,9 @@ import store from "./store";
 import Dashboard from "./components/dashboard/Dashboard";
 import CreateProfile from "./components/create-profile/CreateProfile";
 import PrivateRoute from "./components/common/PrivateRoute";
+import EditProfile from "./components/edit-profile/EditProfile";
+import AddExperience from "./components/add-credentials/AddExperience";
+import AddEducation from "./components/add-credentials/AddEducation";
 
 //check token and then set the user
 if (localStorage.jwtToken) {
@@ -51,6 +54,9 @@ function App() {
           <Route path="/register" element={<Register />} />{" "}
           <Route path="/dashboard" element={<Dashboard />} />{" "}
           <Route path="/create-profile" element={<CreateProfile />} />{" "}
+          <Route path="/edit-profile" element={<EditProfile />} />{" "}
+          <Route path="/add-experience" element={<AddExperience />} />{" "}
+          <Route path="/add-education" element={<AddEducation />} />{" "}
         </Routes>{" "}
         <Footer />
       </Router>{" "}

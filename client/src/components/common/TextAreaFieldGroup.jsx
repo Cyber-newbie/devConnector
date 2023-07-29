@@ -10,6 +10,7 @@ const TextAreaFieldGroup = forwardRef((props, ref) => {
         placeholder={props.placeholder}
         name={props.name}
         onChange={props.onChange}
+        defaultValue={props.defaultValue}
         ref={ref}
       />
       {props.info && (

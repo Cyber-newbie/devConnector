@@ -13,6 +13,7 @@ const TextFieldGroup = forwardRef((props, ref) => {
         onChange={props.onChange}
         disabled={props.disabled}
         ref={ref}
+        defaultValue={props.defaultValue}
       />
       {props.info && (
         <small className="form-text text-muted">{props.info}</small>

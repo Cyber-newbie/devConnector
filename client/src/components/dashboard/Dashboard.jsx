@@ -1,12 +1,13 @@
 import { connect } from "react-redux";
-import { getCurrentProfile } from "../../actions/profileActions";
+import { getCurrentProfile, deleteAccount } from "../../actions/profileActions";
 import { useNavigate } from "react-router-dom";
 import { useEffect } from "react";
 import Spinner from "../common/Spinner";
 import { Link } from "react-router-dom";
+import ProfileActions from "./ProfileActions";
 const Dashboad = (props) => {
   const navigate = useNavigate();
-  const { getCurrentProfile } = props;
+  const { getCurrentProfile, deleteAccount } = props;
   const { isAuthenticated } = props.auth;
   useEffect(() => {
     if (!isAuthenticated) {
@@ -15,15 +16,31 @@ const Dashboad = (props) => {
       getCurrentProfile();
       console.log("profiling");
     }
-  }, []);
+  }, [isAuthenticated]);
+  const onDeleteClick = () => {
+    deleteAccount();
+  };
   const { user } = props.auth;
   const { profile, loading } = props.profile;
+
   let dashboardContent;
   if (profile == null || loading) {
     dashboardContent = <Spinner />;
   } else {
     if (Object.keys(profile).length > 0) {
-      dashboardContent = <h4>TODO: Display Profile</h4>;
+      dashboardContent = (
+        <div>
+          <p className="lead text-muted">
+            Welcome{" "}
+            <Link to={`/profile/${profile.profile.handle}`}>{user.name}</Link>
+          </p>
+          <ProfileActions />
+          <div style={{ marginBottom: "60px" }} />
+          <button onClick={onDeleteClick} className="btn btn-danger">
+            Delete My Account
+          </button>
+        </div>
+      );
     } else {
       dashboardContent = (
         <div>
@@ -36,6 +53,7 @@ const Dashboad = (props) => {
       );
     }
   }
+
   return (
     <div className="dashboard">
       <div className="container">
@@ -55,4 +73,6 @@ const mapStateToProps = (state) => ({
   auth: state.auth,
 });
 
-export default connect(mapStateToProps, { getCurrentProfile })(Dashboad);
+export default connect(mapStateToProps, { getCurrentProfile, deleteAccount })(
+  Dashboad
+);

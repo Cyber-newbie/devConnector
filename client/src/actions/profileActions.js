@@ -2,7 +2,8 @@ import {
     PROFILE_LOADING,
     GET_PROFILE,
     CLEAR_CURRENT_PROFILE,
-    GET_ERROR
+    GET_ERROR,
+    SET_CURRENT_USER
 } from "./type";
 
 //get current profile
@@ -42,18 +43,124 @@ export const createProfile = (profileData) => async dispatch => {
     })
 
     const newProfile = await profile.json()
-    console.log(profileData);
     console.log(newProfile.hasOwnProperty('createdProfile'));
 
     if (newProfile.hasOwnProperty('createdProfile')) {
+        dispatch({
+            type: GET_PROFILE,
+            payload: newProfile
 
+        })
         console.log('profile created');
+
+    }
+    if (newProfile.hasOwnProperty('uptProfile')) {
+
+        console.log('profile updated');
 
     } else if (!newProfile.hasOwnProperty('status') || !newProfile.hasOwnProperty('handle') || !newProfile.hasOwnProperty('skills')) {
         dispatch({
             type: GET_ERROR,
             payload: newProfile
+
         })
+    }
+}
+
+export const addExperience = (addExp, navigate) => async dispatch => {
+
+    const added = await fetch("http://localhost:5000/api/profile/experience", {
+        method: "POST",
+        headers: {
+            Authorization: localStorage.jwtToken,
+            "Content-type": "application/json; charset=UTF-8",
+            "Access-Control-Allow-Origin": "*",
+            "Access-Control-Allow-Credentials": true,
+        },
+        body: JSON.stringify(addExp),
+        // mode: "no-cors",
+    })
+
+    const Exp = await added.json()
+    console.log(Exp);
+    if (Exp.title === "please enter title field" || Exp.company === "please enter company field" || Exp.from === "please enter from date field") {
+        return dispatch({
+            type: GET_ERROR,
+            payload: Exp
+
+        })
+    }
+    //else {
+
+    //     dispatch({
+    //         type: GET_ERROR,
+    //         payload: {  }
+
+    //     })
+    //     navigate("/dashboard")
+    // }
+
+
+    navigate("/dashboard")
+    console.log(Exp.title);
+
+}
+
+
+export const addEducation = (addEdu, navigate) => async dispatch => {
+
+    const added = await fetch("http://localhost:5000/api/profile/education", {
+        method: "POST",
+        headers: {
+            Authorization: localStorage.jwtToken,
+            "Content-type": "application/json; charset=UTF-8",
+            "Access-Control-Allow-Origin": "*",
+            "Access-Control-Allow-Credentials": true,
+        },
+        body: JSON.stringify(addEdu),
+        // mode: "no-cors",
+    })
+
+    const Edu = await added.json()
+    console.log(Edu);
+    if (Edu.school === "please enter school field" || Edu.degree === "please enter degree field" || Edu.fieldofstudy === "please enter study field" || Edu.from === "please enter from date field") {
+        return dispatch({
+            type: GET_ERROR,
+            payload: Edu
+
+        })
+    }
+
+    navigate("/dashboard")
+
+}
+
+
+export const deleteAccount = () => async dispatch => {
+    if (window.confirm('Are you sure? this cannot be undone!')) {
+        try {
+            await fetch("http://localhost:5000/api/profile", {
+                method: "DELETE",
+                headers: {
+                    Authorization: localStorage.jwtToken,
+                    "Content-type": "application/json; charset=UTF-8",
+                    "Access-Control-Allow-Origin": "*",
+                    "Access-Control-Allow-Credentials": true,
+                }
+                // mode: "no-cors",
+            })
+            dispatch({
+                type: SET_CURRENT_USER,
+                payload: {}
+            })
+
+        } catch (err) {
+            dispatch({
+                type: GET_ERROR,
+                payload: err
+            })
+        }
+
     }
 }
 

@@ -4,33 +4,88 @@ import TextFieldGroup from "../common/TextFieldGroup";
 import TextAreaFieldGroup from "../common/TextAreaFieldGroup";
 import SelectListFieldGroup from "../common/SelectListGroup";
 import InputGroup from "../common/InputGroup";
+import isEmpty from "../../validation/is-empty";
 import { createProfile, getCurrentProfile } from "../../actions/profileActions";
 import { connect } from "react-redux";
 let render = 0;
-const CreateProfile = (props) => {
+const EditProfile = (props) => {
   const navigate = useNavigate();
   const { profile, profileExist } = props.profile;
   const { getCurrentProfile } = props;
-  const [submit, setSubmit] = useState(false);
   const [errors, setErrors] = useState({ ...props.error });
+  const [useProfile, setUseProfile] = useState({ ...props.profile.profile });
 
+  useEffect(() => {
+    getCurrentProfile();
+  }, []);
+
+  useEffect(() => {
+    if (props.profile.profile) {
+      //make a copy of profile
+      const oldProfile = props.profile.profile;
+      console.log(oldProfile.profile);
+      // join the skill array as comma separated
+      const skillsCSV = oldProfile.profile.skills.join(",");
+      const updatedProfile = {
+        handle: !isEmpty(oldProfile.profile.handle)
+          ? oldProfile.profile.handle
+          : "",
+        status: !isEmpty(oldProfile.profile.status)
+          ? oldProfile.profile.status
+          : "",
+        company: !isEmpty(oldProfile.profile.company)
+          ? oldProfile.profile.company
+          : "",
+        website: !isEmpty(oldProfile.profile.website)
+          ? oldProfile.profile.website
+          : "",
+        location: !isEmpty(oldProfile.profile.location)
+          ? oldProfile.profile.location
+          : "",
+        skills: skillsCSV,
+        githubusername: !isEmpty(oldProfile.profile.githubusername)
+          ? oldProfile.profile.githubusername
+          : "",
+        bio: !isEmpty(oldProfile.profile.bio) ? oldProfile.profile.bio : "",
+        twitter: !isEmpty(oldProfile.profile.twitter)
+          ? oldProfile.profile.twitter
+          : "",
+        facebook: !isEmpty(oldProfile.profile.facebook)
+          ? oldProfile.profile.facebook
+          : "",
+        linkedin: !isEmpty(oldProfile.profile.linkedin)
+          ? oldProfile.profile.linkedin
+          : "",
+        youtube: !isEmpty(oldProfile.profile.youtube)
+          ? oldProfile.profile.youtube
+          : "",
+        instagram: !isEmpty(oldProfile.profile.instagram)
+          ? oldProfile.profile.instagram
+          : "",
+      };
+      setUseProfile({ ...updatedProfile });
+      //   console.log(
+      //     `props profile recieved ${JSON.stringify(useProfile.profile.handle)}`
+      //   );
+    }
+  }, [props.profile.profile]);
   useEffect(() => {
     render = render + 1;
     console.log(`render count ${render}`);
     console.log(errors);
-    getCurrentProfile();
     if (props.error) {
       setErrors((prevErrors) => ({ ...prevErrors, ...props.error }));
       console.log("setting error");
     }
   }, [props.error]);
 
-  useEffect(() => {
-    console.log("profile exist ?");
-    if (profileExist) {
-      navigate("/dashboard");
-    }
-  }, [profileExist]);
+  //   useEffect(() => {
+  //     console.log("profile exist ?");
+  //     if (profileExist) {
+  //       navigate("/dashboard");
+  //     }
+  //   }, [profileExist]);
+  //   console.log(useProfile.profile.handle);
   const handle = useRef(null);
   const company = useRef(null);
   const website = useRef(null);
@@ -126,11 +181,11 @@ const CreateProfile = (props) => {
 
     props.createProfile(profileData);
 
+    navigate("/dashboard");
     console.log(profile);
     console.log(`component errors ${Object.keys(errors)}`);
   };
 
-  console.log(submit);
   // Select options for status
   const options = [
     { label: "* Select Professional Status", value: "" },
@@ -155,6 +210,7 @@ const CreateProfile = (props) => {
           ref={twitter}
           onChange={twitterHandler}
           error={errors["social.twitter"]}
+          defaultValue={useProfile.twitter}
         />
 
         <InputGroup
@@ -164,6 +220,7 @@ const CreateProfile = (props) => {
           ref={facebook}
           onChange={facebookHandler}
           error={errors["social.facebook"]}
+          defaultValue={useProfile.facebook}
         />
 
         <InputGroup
@@ -173,6 +230,7 @@ const CreateProfile = (props) => {
           ref={linkedin}
           onChange={linkedinHandler}
           error={errors["social.linkedin"]}
+          defaultValue={useProfile.linkedin}
         />
 
         <InputGroup
@@ -182,6 +240,7 @@ const CreateProfile = (props) => {
           ref={youtube}
           onChange={youtubeHandler}
           error={errors["social.youtube"]}
+          defaultValue={useProfile.youtube}
         />
 
         <InputGroup
@@ -191,20 +250,18 @@ const CreateProfile = (props) => {
           ref={instagram}
           onChange={instagramHandler}
           error={errors.instagram}
+          defaultValue={useProfile.instagram}
         />
       </div>
     );
   }
-
+  console.log(useProfile);
   return (
     <div className="create-profile">
       <div className="container">
         <div className="row">
           <div className="col-md-8 m-auto">
-            <h1 className="display-4 text-center">Create Your Profile</h1>
-            <p className="lead text-center">
-              let's get some information to make your profile stand out
-            </p>
+            <h1 className="display-4 text-center">Edit Your Profile</h1>
             <small className="d-block pb-3">* = required fields</small>
             <form onSubmit={submitHandler}>
               <TextFieldGroup
@@ -213,6 +270,7 @@ const CreateProfile = (props) => {
                 name="handle"
                 onChange={handleHandler}
                 ref={handle}
+                defaultValue={useProfile.handle}
                 error={errors.handle}
                 info="Please use unique handle name"
               />
@@ -223,6 +281,7 @@ const CreateProfile = (props) => {
                 ref={status}
                 options={options}
                 error={errors.status}
+                value={useProfile.status}
                 info="where you are at in your career"
               />
               <TextFieldGroup
@@ -231,6 +290,7 @@ const CreateProfile = (props) => {
                 ref={company}
                 onChange={companyHandler}
                 error={errors.company}
+                defaultValue={useProfile.company}
                 info="Could be your own company or one you work for"
               />
               <TextFieldGroup
@@ -239,6 +299,7 @@ const CreateProfile = (props) => {
                 ref={website}
                 onChange={websiteHandler}
                 error={errors.website}
+                defaultValue={useProfile.website}
                 info="Could be your own website or a company one"
               />
               <TextFieldGroup
@@ -247,6 +308,7 @@ const CreateProfile = (props) => {
                 ref={location}
                 onChange={locationHandler}
                 error={errors.location}
+                defaultValue={useProfile.location}
                 info="City or city & state suggested (eg. Boston, MA)"
               />
               <TextFieldGroup
@@ -255,6 +317,7 @@ const CreateProfile = (props) => {
                 ref={skills}
                 onChange={skillsHandler}
                 error={errors.skills}
+                defaultValue={useProfile.skills}
                 info="Please use comma separated values (eg.
                     HTML,CSS,JavaScript,PHP)"
               />
@@ -264,6 +327,7 @@ const CreateProfile = (props) => {
                 ref={githubusername}
                 onChange={gitHandler}
                 error={errors.githubusername}
+                defaultValue={useProfile.githubusername}
                 info="If you want your latest repos and a Github link, include your username"
               />
               <TextAreaFieldGroup
@@ -272,6 +336,7 @@ const CreateProfile = (props) => {
                 ref={bio}
                 onChange={bioHandler}
                 error={errors.bio}
+                defaultValue={useProfile.bio}
                 info="Tell us a little about yourself"
               />
               <div className="mb-3">
@@ -304,5 +369,5 @@ const mapStateToProps = (state) => ({
 });
 
 export default connect(mapStateToProps, { createProfile, getCurrentProfile })(
-  CreateProfile
+  EditProfile
 );
