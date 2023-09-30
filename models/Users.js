@@ -13,9 +13,9 @@ const UserSchema = new Schema({
     },
     password: {
         type: String,
-        required: true,
-        set: value => value === '' ? undefined : value,
-        validate: v => v.length > 0
+        required: true
+        // set: value => value === '' ? undefined : value,
+        // validate: v => v.length > 0
     },
     avatar: {
         type: String,

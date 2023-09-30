@@ -3,7 +3,7 @@ import {
     SET_CURRENT_USER
 } from "./type";
 import jwt_decode from 'jwt-decode'
-export const registerUser = userData => async dispatch => {
+export const registerUser = (userData, navigate) => async dispatch => {
     const user = await fetch("http://localhost:5000/api/users/register", {
         method: "POST",
         headers: {
@@ -16,13 +16,15 @@ export const registerUser = userData => async dispatch => {
     });
     const created = await user.json()
     console.log(created);
-    if (created.name || created.email) {
-        dispatch({
+    if (created.name === "name is required" || created.email === "email is required" || created.password === "password is required") {
+        return dispatch({
             type: GET_ERROR,
             payload: created
+
         })
-        // localStorage.setItem('success', false)
     }
+
+    navigate("/login")
 
 }
 

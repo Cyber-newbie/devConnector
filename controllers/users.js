@@ -37,8 +37,8 @@ const registerUser = async (req, res) => {
             avatar,
             password: req.body.password
         })
-
         try {
+            await newUser.validate()
             // if(newUser.password == null){
             //     console.log('password is null');
             // }    
@@ -47,26 +47,27 @@ const registerUser = async (req, res) => {
             const hashedPassword = await bcrypt.hash(newUser.password, salt)
             newUser.password = hashedPassword
             const user = await newUser.save()
-            res.status(201).json({
-                msg: 'user created',
-                user
-            })
+            res.status(201).json(user)
         } catch (error) {
             let errors = {};
             if (error.name === "ValidationError") {
                 Object.keys(error.errors).forEach((key) => {
                     errors[key] = error.errors[key].message;
                 });
-                if (newUser.password == undefined) {
-                    errors.password = "password field is required"
+                if (errors.password == "Path `password` is required.") {
+                    errors.password = "password is required"
+                }
+                if (errors.email === "Path `email` is required.") {
+                    errors.email = "email is required"
+                }
+                if (errors.name === "Path `name` is required.") {
+                    errors.name = "name is required"
                 }
                 return res.status(400).json(errors);
             }
 
-            res.status(500).json({
-                errors,
-                error
-            });
+            res.status(500).json(error);
+
         }
     }
 }

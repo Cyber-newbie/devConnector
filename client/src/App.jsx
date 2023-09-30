@@ -11,17 +11,18 @@ import {
 import jwtDecode from "jwt-decode";
 import { logoutUser, setCurrentUser } from "./actions/authActions";
 import { clearCurrentProfile } from "./actions/profileActions";
-import { connect } from "react-redux";
 import { Provider } from "react-redux";
 import Login from "./components/auth/Login";
 import Register from "./components/auth/Register";
 import store from "./store";
 import Dashboard from "./components/dashboard/Dashboard";
 import CreateProfile from "./components/create-profile/CreateProfile";
-import PrivateRoute from "./components/common/PrivateRoute";
 import EditProfile from "./components/edit-profile/EditProfile";
 import AddExperience from "./components/add-credentials/AddExperience";
 import AddEducation from "./components/add-credentials/AddEducation";
+import Profiles from "./components/profiles/Profiles";
+import Profile from "./components/profile/Profile";
+import NotFound from "./components/not-found/NotFound";
 
 //check token and then set the user
 if (localStorage.jwtToken) {
@@ -57,14 +58,14 @@ function App() {
           <Route path="/edit-profile" element={<EditProfile />} />{" "}
           <Route path="/add-experience" element={<AddExperience />} />{" "}
           <Route path="/add-education" element={<AddEducation />} />{" "}
+          <Route path="/profiles" element={<Profiles />} />{" "}
+          <Route path="/profile/:handle" element={<Profile />} />{" "}
+          <Route exact path="/not-found" element={<NotFound />} />{" "}
         </Routes>{" "}
         <Footer />
       </Router>{" "}
     </Provider>
   );
 }
-// const mapStateToProps = (state) => ({
-//   auth: state.auth,
-// });
 
 export default App;

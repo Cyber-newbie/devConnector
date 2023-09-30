@@ -1,26 +1,37 @@
 import { useRef } from "react";
+import { GET_ERROR } from "../../actions/type";
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { connect } from "react-redux";
+import { connect, useDispatch } from "react-redux";
 import { registerUser } from "../../actions/authActions";
 import TextFieldGroup from "../common/TextFieldGroup";
 
 const Register = (props) => {
   const navigate = useNavigate();
-  const isSuccess = localStorage.getItem("success");
-  useEffect(() => {
-    if (isSuccess) {
-      navigate("/login");
-    }
-    localStorage.clear();
-    console.log("running");
-  }, [isSuccess, navigate]);
-
+  const dispatch = useDispatch();
   const [errors, setErrors] = useState({});
   const nameInput = useRef(null);
   const emailInput = useRef(null);
   const pswInput = useRef(null);
   const pswInput2 = useRef(null);
+
+  useEffect(() => {
+    console.log(errors);
+    if (props.error) {
+      setErrors((prevErrors) => ({ ...prevErrors, ...props.error }));
+      console.log("setting error");
+    }
+  }, [props.error]);
+
+  useEffect(() => {
+    return () => {
+      dispatch({
+        type: GET_ERROR,
+        payload: {},
+      });
+    };
+  }, []);
+
   const nameHandler = (e) => {
     nameInput.current.value = e.target.value;
   };
@@ -46,16 +57,15 @@ const Register = (props) => {
     };
 
     if (data.password !== pswInput2.current.value) {
-      return console.log("password do not match");
+      return setErrors((prevErrors) => ({
+        ...prevErrors,
+        ...props.error,
+        confirmpswd: "password do not match",
+      }));
     }
 
-    props.registerUser(data);
+    props.registerUser(data, navigate);
 
-    if (props.error) {
-      setErrors({ ...props.error });
-    } else {
-      localStorage.setItem("success", true);
-    }
     console.log(props.error);
     nameInput.current.value = "";
     emailInput.current.value = "";
@@ -95,6 +105,7 @@ const Register = (props) => {
                 name="password"
                 ref={pswInput}
                 onChange={pswdHandler}
+                error={errors.password}
                 type="password"
               />
 
@@ -103,6 +114,7 @@ const Register = (props) => {
                 name="password"
                 ref={pswInput2}
                 onChange={pswd2Handler}
+                error={errors.confirmpswd}
                 type="password"
               />
 

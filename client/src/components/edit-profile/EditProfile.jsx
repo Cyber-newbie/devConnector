@@ -1,5 +1,5 @@
 import { useRef, useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import TextFieldGroup from "../common/TextFieldGroup";
 import TextAreaFieldGroup from "../common/TextAreaFieldGroup";
 import SelectListFieldGroup from "../common/SelectListGroup";
@@ -25,50 +25,30 @@ const EditProfile = (props) => {
       const oldProfile = props.profile.profile;
       console.log(oldProfile.profile);
       // join the skill array as comma separated
-      const skillsCSV = oldProfile.profile.skills.join(",");
+      const skillsCSV = oldProfile.skills.join(",");
       const updatedProfile = {
-        handle: !isEmpty(oldProfile.profile.handle)
-          ? oldProfile.profile.handle
-          : "",
-        status: !isEmpty(oldProfile.profile.status)
-          ? oldProfile.profile.status
-          : "",
-        company: !isEmpty(oldProfile.profile.company)
-          ? oldProfile.profile.company
-          : "",
-        website: !isEmpty(oldProfile.profile.website)
-          ? oldProfile.profile.website
-          : "",
-        location: !isEmpty(oldProfile.profile.location)
-          ? oldProfile.profile.location
-          : "",
+        handle: !isEmpty(oldProfile.handle) ? oldProfile.handle : "",
+        status: !isEmpty(oldProfile.status) ? oldProfile.status : "",
+        company: !isEmpty(oldProfile.company) ? oldProfile.company : "",
+        website: !isEmpty(oldProfile.website) ? oldProfile.website : "",
+        location: !isEmpty(oldProfile.location) ? oldProfile.location : "",
         skills: skillsCSV,
-        githubusername: !isEmpty(oldProfile.profile.githubusername)
-          ? oldProfile.profile.githubusername
+        githubusername: !isEmpty(oldProfile.githubusername)
+          ? oldProfile.githubusername
           : "",
-        bio: !isEmpty(oldProfile.profile.bio) ? oldProfile.profile.bio : "",
-        twitter: !isEmpty(oldProfile.profile.twitter)
-          ? oldProfile.profile.twitter
-          : "",
-        facebook: !isEmpty(oldProfile.profile.facebook)
-          ? oldProfile.profile.facebook
-          : "",
-        linkedin: !isEmpty(oldProfile.profile.linkedin)
-          ? oldProfile.profile.linkedin
-          : "",
-        youtube: !isEmpty(oldProfile.profile.youtube)
-          ? oldProfile.profile.youtube
-          : "",
-        instagram: !isEmpty(oldProfile.profile.instagram)
-          ? oldProfile.profile.instagram
-          : "",
+        bio: !isEmpty(oldProfile.bio) ? oldProfile.bio : "",
+        twitter: !isEmpty(oldProfile.twitter) ? oldProfile.twitter : "",
+        facebook: !isEmpty(oldProfile.facebook) ? oldProfile.facebook : "",
+        linkedin: !isEmpty(oldProfile.linkedin) ? oldProfile.linkedin : "",
+        youtube: !isEmpty(oldProfile.youtube) ? oldProfile.youtube : "",
+        instagram: !isEmpty(oldProfile.instagram) ? oldProfile.instagram : "",
       };
       setUseProfile({ ...updatedProfile });
       //   console.log(
-      //     `props profile recieved ${JSON.stringify(useProfile.profile.handle)}`
+      //     `props profile recieved ${JSON.stringify(useProfile.handle)}`
       //   );
     }
-  }, [props.profile.profile]);
+  }, [props.profile]);
   useEffect(() => {
     render = render + 1;
     console.log(`render count ${render}`);
@@ -261,6 +241,10 @@ const EditProfile = (props) => {
       <div className="container">
         <div className="row">
           <div className="col-md-8 m-auto">
+            <Link to={"/dashboard"} className="btn btn-light">
+              {" "}
+              Go Back{" "}
+            </Link>
             <h1 className="display-4 text-center">Edit Your Profile</h1>
             <small className="d-block pb-3">* = required fields</small>
             <form onSubmit={submitHandler}>

@@ -5,6 +5,8 @@ import { useEffect } from "react";
 import Spinner from "../common/Spinner";
 import { Link } from "react-router-dom";
 import ProfileActions from "./ProfileActions";
+import Experience from "./Experience";
+import Education from "./Education";
 const Dashboad = (props) => {
   const navigate = useNavigate();
   const { getCurrentProfile, deleteAccount } = props;
@@ -14,7 +16,6 @@ const Dashboad = (props) => {
       navigate("/login");
     } else {
       getCurrentProfile();
-      console.log("profiling");
     }
   }, [isAuthenticated]);
   const onDeleteClick = () => {
@@ -22,8 +23,9 @@ const Dashboad = (props) => {
   };
   const { user } = props.auth;
   const { profile, loading } = props.profile;
-
+  console.log(`fetching profile: ${profile}`);
   let dashboardContent;
+  // console.log(`checking if profile is: ${profile.profile.handle}`);
   if (profile == null || loading) {
     dashboardContent = <Spinner />;
   } else {
@@ -31,10 +33,11 @@ const Dashboad = (props) => {
       dashboardContent = (
         <div>
           <p className="lead text-muted">
-            Welcome{" "}
-            <Link to={`/profile/${profile.profile.handle}`}>{user.name}</Link>
+            Welcome <Link to={`/profile/${profile.handle}`}>{user.name}</Link>
           </p>
           <ProfileActions />
+          <Experience experience={profile.experience} />
+          <Education education={profile.education} />
           <div style={{ marginBottom: "60px" }} />
           <button onClick={onDeleteClick} className="btn btn-danger">
             Delete My Account
@@ -55,7 +58,7 @@ const Dashboad = (props) => {
   }
 
   return (
-    <div className="dashboard">
+    <div className="dashboard ">
       <div className="container">
         <div className="row">
           <div className="col-md-12">

@@ -1,6 +1,7 @@
 import {
     PROFILE_LOADING,
     GET_PROFILE,
+    GET_PROFILES,
     CLEAR_CURRENT_PROFILE,
     GET_ERROR,
     SET_CURRENT_USER
@@ -8,14 +9,13 @@ import {
 
 //get current profile
 export const getCurrentProfile = () => async dispatch => {
-    dispatch(setProfileLoading)
+    dispatch(setProfileLoading())
     const profile = await fetch("http://localhost:5000/api/profile", {
         headers: {
             Authorization: localStorage.jwtToken
         }
     })
     const newProfile = await profile.json()
-    console.log(newProfile);
     if (newProfile) {
         dispatch({
             type: GET_PROFILE,
@@ -28,6 +28,25 @@ export const getCurrentProfile = () => async dispatch => {
         })
     }
 }
+
+//get profile by handle
+export const getProfileByHandle = (handle) => async dispatch => {
+    dispatch(setProfileLoading())
+    const profile = await fetch(`http://localhost:5000/api/profile/${handle}`)
+    const newProfile = await profile.json()
+    if (newProfile) {
+        dispatch({
+            type: GET_PROFILE,
+            payload: newProfile
+        })
+    } else {
+        dispatch({
+            type: GET_PROFILE,
+            payload: {}
+        })
+    }
+}
+
 
 export const createProfile = (profileData) => async dispatch => {
     const profile = await fetch("http://localhost:5000/api/profile", {
@@ -135,7 +154,105 @@ export const addEducation = (addEdu, navigate) => async dispatch => {
 
 }
 
+export const deleteExperience = (id) => async dispatch => {
 
+    //API to delete an experience from user's profile
+
+    try {
+        const profile = await fetch(`http://localhost:5000/api/profile/experience/${id}`, {
+            method: "DELETE",
+            headers: {
+                Authorization: localStorage.jwtToken,
+                "Content-type": "application/json; charset=UTF-8",
+                "Access-Control-Allow-Origin": "*",
+                "Access-Control-Allow-Credentials": true,
+            }
+            // mode: "no-cors",
+        })
+        if (!profile.ok) {
+            throw new Error("Failed to delete experience");
+        }
+
+        const newProfile = await profile.json()
+        dispatch({
+            type: GET_PROFILE,
+            payload: newProfile
+        })
+        console.log(newProfile);
+    } catch (error) {
+        dispatch({
+            type: GET_ERROR,
+            payload: error
+        })
+    }
+
+
+}
+
+
+export const deleteEducation = (id) => async dispatch => {
+
+    //API to delete an Education from user's profile
+
+    try {
+        const profile = await fetch(`http://localhost:5000/api/profile/education/${id}`, {
+            method: "DELETE",
+            headers: {
+                Authorization: localStorage.jwtToken,
+                "Content-type": "application/json; charset=UTF-8",
+                "Access-Control-Allow-Origin": "*",
+                "Access-Control-Allow-Credentials": true,
+            }
+            // mode: "no-cors",
+        })
+        if (!profile.ok) {
+            throw new Error("Failed to delete Education");
+        }
+
+        const newProfile = await profile.json()
+        dispatch({
+            type: GET_PROFILE,
+            payload: newProfile
+        })
+        console.log(newProfile);
+    } catch (error) {
+        dispatch({
+            type: GET_ERROR,
+            payload: error
+        })
+    }
+
+
+}
+
+
+export const getProfiles = () => async dispatch => {
+    //get all the profiles
+    dispatch(setProfileLoading())
+    try {
+        const profiles = await fetch(`http://localhost:5000/api/profile/all`, {
+            method: "GET"
+            // mode: "no-cors",
+        })
+        // if (!profile.ok) {
+        //     throw new Error("Failed to delete experience");
+        // }
+
+        const newProfiles = await profiles.json()
+        dispatch({
+            type: GET_PROFILES,
+            payload: newProfiles
+        })
+
+    } catch (error) {
+        dispatch({
+            type: GET_PROFILES,
+            payload: null
+        })
+    }
+}
+
+//delete user's account
 export const deleteAccount = () => async dispatch => {
     if (window.confirm('Are you sure? this cannot be undone!')) {
         try {

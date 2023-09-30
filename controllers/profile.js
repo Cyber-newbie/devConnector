@@ -7,9 +7,7 @@ const getProfile = async (req, res) => {
             user: req.user.id
         }).populate('user', ['name', 'avatar'])
         if (profile) {
-            res.status(200).json({
-                profile
-            })
+            res.status(200).json(profile)
         } else {
             res.status(404).json({})
         }
