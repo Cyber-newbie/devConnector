@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
 import TextFieldGroup from "../common/TextFieldGroup";
 import TextAreaFieldGroup from "../common/TextAreaFieldGroup";
-import { GET_ERROR } from "../../actions/type";
+import { GET_ERROR } from "../../type";
 import { addExperience } from "../../actions/profileActions";
 import { connect, useDispatch } from "react-redux";
 function AddExperience(props) {

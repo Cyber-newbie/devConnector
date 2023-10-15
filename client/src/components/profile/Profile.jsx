@@ -24,11 +24,16 @@ const Profile = (props) => {
       console.log("Fetch in progress, waiting...");
       return; // Wait until the fetch is complete
     }
-    if (profile === null) {
+
+    if (loading && profile === null) {
       console.log("Navigating to /not-found...");
       navigate("/not-found");
     }
-  }, [profile, isFetchInProgress]);
+    // if (profile === null) {
+    //   console.log("Navigating to /not-found...");
+    //   navigate("/not-found");
+    // }
+  }, [isFetchInProgress]);
   if (profile === null || loading) {
     profileContent = <Spinner />;
   } else {

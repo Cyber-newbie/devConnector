@@ -5,7 +5,7 @@ import {
     CLEAR_CURRENT_PROFILE,
     GET_ERROR,
     SET_CURRENT_USER
-} from "./type";
+} from "../type";
 
 //get current profile
 export const getCurrentProfile = () => async dispatch => {

@@ -1,5 +1,5 @@
 import { useRef } from "react";
-import { GET_ERROR } from "../../actions/type";
+import { GET_ERROR } from "../../type";
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { connect, useDispatch } from "react-redux";

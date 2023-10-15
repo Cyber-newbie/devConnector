@@ -23,6 +23,7 @@ import AddEducation from "./components/add-credentials/AddEducation";
 import Profiles from "./components/profiles/Profiles";
 import Profile from "./components/profile/Profile";
 import NotFound from "./components/not-found/NotFound";
+import Posts from "./components/posts/Posts";
 
 //check token and then set the user
 if (localStorage.jwtToken) {
@@ -60,6 +61,7 @@ function App() {
           <Route path="/add-education" element={<AddEducation />} />{" "}
           <Route path="/profiles" element={<Profiles />} />{" "}
           <Route path="/profile/:handle" element={<Profile />} />{" "}
+          <Route path="/feed" element={<Posts />} />{" "}
           <Route exact path="/not-found" element={<NotFound />} />{" "}
         </Routes>{" "}
         <Footer />

@@ -1,7 +1,7 @@
 import {
     GET_ERROR,
     SET_CURRENT_USER
-} from "./type";
+} from "../type";
 import jwt_decode from 'jwt-decode'
 export const registerUser = (userData, navigate) => async dispatch => {
     const user = await fetch("http://localhost:5000/api/users/register", {
