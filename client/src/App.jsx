@@ -2,12 +2,7 @@ import "./App.css";
 import Footer from "./components/Footer";
 import Landing from "./components/Landing";
 import Navbar from "./components/Navbar";
-import {
-  BrowserRouter as Router,
-  Route,
-  Routes,
-  Navigate,
-} from "react-router-dom";
+import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import jwtDecode from "jwt-decode";
 import { logoutUser, setCurrentUser } from "./actions/authActions";
 import { clearCurrentProfile } from "./actions/profileActions";
@@ -24,6 +19,8 @@ import Profiles from "./components/profiles/Profiles";
 import Profile from "./components/profile/Profile";
 import NotFound from "./components/not-found/NotFound";
 import Posts from "./components/posts/Posts";
+import ProtectedRoute from "./helper/ProtectedRoute";
+import Post from "./components/post/Post";
 
 //check token and then set the user
 if (localStorage.jwtToken) {
@@ -42,10 +39,6 @@ if (localStorage.jwtToken) {
 }
 
 function App() {
-  // const { isAuthenticated } = props.auth;
-  const isAuthenticated = store.getState().auth.isAuthenticated;
-  console.log(`app running ${isAuthenticated}`);
-
   return (
     <Provider store={store}>
       <Router>
@@ -54,14 +47,64 @@ function App() {
           <Route exact path="/" element={<Landing />} />{" "}
           <Route path="/login" element={<Login />} />{" "}
           <Route path="/register" element={<Register />} />{" "}
-          <Route path="/dashboard" element={<Dashboard />} />{" "}
-          <Route path="/create-profile" element={<CreateProfile />} />{" "}
-          <Route path="/edit-profile" element={<EditProfile />} />{" "}
-          <Route path="/add-experience" element={<AddExperience />} />{" "}
-          <Route path="/add-education" element={<AddEducation />} />{" "}
+          <Route
+            path="/dashboard"
+            element={
+              <ProtectedRoute>
+                <Dashboard />
+              </ProtectedRoute>
+            }
+          />{" "}
+          <Route
+            path="/create-profile"
+            element={
+              <ProtectedRoute>
+                <CreateProfile />
+              </ProtectedRoute>
+            }
+          />{" "}
+          <Route
+            path="/edit-profile"
+            element={
+              <ProtectedRoute>
+                <EditProfile />
+              </ProtectedRoute>
+            }
+          />{" "}
+          <Route
+            path="/add-experience"
+            element={
+              <ProtectedRoute>
+                <AddExperience />
+              </ProtectedRoute>
+            }
+          />{" "}
+          <Route
+            path="/add-education"
+            element={
+              <ProtectedRoute>
+                <AddEducation />
+              </ProtectedRoute>
+            }
+          />{" "}
           <Route path="/profiles" element={<Profiles />} />{" "}
           <Route path="/profile/:handle" element={<Profile />} />{" "}
-          <Route path="/feed" element={<Posts />} />{" "}
+          <Route
+            path="/feed"
+            element={
+              <ProtectedRoute>
+                <Posts />
+              </ProtectedRoute>
+            }
+          />{" "}
+          <Route
+            path="/post/:id"
+            element={
+              <ProtectedRoute>
+                <Post />
+              </ProtectedRoute>
+            }
+          />{" "}
           <Route exact path="/not-found" element={<NotFound />} />{" "}
         </Routes>{" "}
         <Footer />

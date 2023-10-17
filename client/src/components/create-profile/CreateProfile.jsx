@@ -9,24 +9,21 @@ import { connect } from "react-redux";
 let render = 0;
 const CreateProfile = (props) => {
   const navigate = useNavigate();
-  const { profile, profileExist } = props.profile;
+  const { profileExist } = props.profile;
   const { getCurrentProfile } = props;
-  const [submit, setSubmit] = useState(false);
+
   const [errors, setErrors] = useState({ ...props.error });
 
   useEffect(() => {
     render = render + 1;
-    console.log(`render count ${render}`);
-    console.log(errors);
+
     getCurrentProfile();
     if (props.error) {
       setErrors((prevErrors) => ({ ...prevErrors, ...props.error }));
-      console.log("setting error");
     }
   }, [props.error]);
 
   useEffect(() => {
-    console.log("profile exist ?");
     if (profileExist) {
       navigate("/dashboard");
     }
@@ -49,7 +46,6 @@ const CreateProfile = (props) => {
 
   const handleHandler = (e) => {
     handle.current.value = e.target.value;
-    console.log(handle.current.value);
   };
 
   const companyHandler = (e) => {
@@ -106,7 +102,6 @@ const CreateProfile = (props) => {
 
   const submitHandler = (e) => {
     e.preventDefault();
-    console.log("submit");
 
     const profileData = {
       handle: handle.current.value,
@@ -125,12 +120,8 @@ const CreateProfile = (props) => {
     };
 
     props.createProfile(profileData);
-
-    console.log(profile);
-    console.log(`component errors ${Object.keys(errors)}`);
   };
 
-  console.log(submit);
   // Select options for status
   const options = [
     { label: "* Select Professional Status", value: "" },

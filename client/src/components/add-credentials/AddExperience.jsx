@@ -22,7 +22,6 @@ function AddExperience(props) {
   useEffect(() => {
     if (props.error) {
       setErrors((prevErrors) => ({ ...prevErrors, ...props.error }));
-      console.log("setting error");
     }
   }, [props.error]);
 
@@ -57,7 +56,6 @@ function AddExperience(props) {
   const onCheck = (e) => {
     setCurrent((prevState) => !prevState);
     setDisabled((prevState) => !prevState);
-    console.log(current);
   };
 
   const descriptionHandler = (e) => {
@@ -77,7 +75,6 @@ function AddExperience(props) {
     };
 
     props.addExperience(addExp, navigate);
-    console.log(addExp);
   };
 
   return (

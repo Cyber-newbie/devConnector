@@ -6,7 +6,8 @@ const {
     deletePost,
     likePost,
     unlikePost,
-    commentPost
+    commentPost,
+    deleteComment
 } = require('../../controllers/posts')
 const passport = require('passport')
 const router = express.Router()
@@ -48,6 +49,13 @@ router.get('/unlike/:id', passport.authenticate('jwt', {
 router.post('/comment/:id', passport.authenticate('jwt', {
     session: false,
 }), commentPost)
+
+//routes@   /api/posts/comment/:id
+//access@   private
+router.delete('/comment/:id/:comment_id', passport.authenticate('jwt', {
+    session: false,
+}), deleteComment)
+
 
 
 module.exports = router

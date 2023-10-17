@@ -1,36 +1,24 @@
 import { useRef } from "react";
-import { GET_ERROR } from "../../type";
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { connect, useDispatch } from "react-redux";
+import { connect } from "react-redux";
 import { registerUser } from "../../actions/authActions";
 import TextFieldGroup from "../common/TextFieldGroup";
 
 const Register = (props) => {
   const navigate = useNavigate();
-  const dispatch = useDispatch();
-  const [errors, setErrors] = useState({});
+
+  const [errors, setErrors] = useState({ ...props.errors });
   const nameInput = useRef(null);
   const emailInput = useRef(null);
   const pswInput = useRef(null);
   const pswInput2 = useRef(null);
 
   useEffect(() => {
-    console.log(errors);
-    if (props.error) {
-      setErrors((prevErrors) => ({ ...prevErrors, ...props.error }));
-      console.log("setting error");
+    if (props.errors) {
+      setErrors((prevErrors) => ({ ...prevErrors, ...props.errors }));
     }
-  }, [props.error]);
-
-  useEffect(() => {
-    return () => {
-      dispatch({
-        type: GET_ERROR,
-        payload: {},
-      });
-    };
-  }, []);
+  }, [props.errors]);
 
   const nameHandler = (e) => {
     nameInput.current.value = e.target.value;
@@ -59,14 +47,13 @@ const Register = (props) => {
     if (data.password !== pswInput2.current.value) {
       return setErrors((prevErrors) => ({
         ...prevErrors,
-        ...props.error,
+        ...props.errors,
         confirmpswd: "password do not match",
       }));
     }
 
     props.registerUser(data, navigate);
 
-    console.log(props.error);
     nameInput.current.value = "";
     emailInput.current.value = "";
     pswInput.current.value = "";
@@ -128,6 +115,6 @@ const Register = (props) => {
 };
 const mapStateToProps = (state) => ({
   auth: state.auth,
-  error: state.errors,
+  errors: state.errors,
 });
 export default connect(mapStateToProps, { registerUser })(Register);

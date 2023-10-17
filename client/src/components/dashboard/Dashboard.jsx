@@ -23,9 +23,8 @@ const Dashboad = (props) => {
   };
   const { user } = props.auth;
   const { profile, loading } = props.profile;
-  console.log(`fetching profile: ${profile}`);
+
   let dashboardContent;
-  // console.log(`checking if profile is: ${profile.profile.handle}`);
   if (profile == null || loading) {
     dashboardContent = <Spinner />;
   } else {

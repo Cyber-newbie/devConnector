@@ -62,7 +62,6 @@ export const createProfile = (profileData) => async dispatch => {
     })
 
     const newProfile = await profile.json()
-    console.log(newProfile.hasOwnProperty('createdProfile'));
 
     if (newProfile.hasOwnProperty('createdProfile')) {
         dispatch({
@@ -70,12 +69,12 @@ export const createProfile = (profileData) => async dispatch => {
             payload: newProfile
 
         })
-        console.log('profile created');
+
 
     }
     if (newProfile.hasOwnProperty('uptProfile')) {
 
-        console.log('profile updated');
+
 
     } else if (!newProfile.hasOwnProperty('status') || !newProfile.hasOwnProperty('handle') || !newProfile.hasOwnProperty('skills')) {
         dispatch({
@@ -101,7 +100,7 @@ export const addExperience = (addExp, navigate) => async dispatch => {
     })
 
     const Exp = await added.json()
-    console.log(Exp);
+
     if (Exp.title === "please enter title field" || Exp.company === "please enter company field" || Exp.from === "please enter from date field") {
         return dispatch({
             type: GET_ERROR,
@@ -109,20 +108,8 @@ export const addExperience = (addExp, navigate) => async dispatch => {
 
         })
     }
-    //else {
-
-    //     dispatch({
-    //         type: GET_ERROR,
-    //         payload: {  }
-
-    //     })
-    //     navigate("/dashboard")
-    // }
-
 
     navigate("/dashboard")
-    console.log(Exp.title);
-
 }
 
 
@@ -141,7 +128,6 @@ export const addEducation = (addEdu, navigate) => async dispatch => {
     })
 
     const Edu = await added.json()
-    console.log(Edu);
     if (Edu.school === "please enter school field" || Edu.degree === "please enter degree field" || Edu.fieldofstudy === "please enter study field" || Edu.from === "please enter from date field") {
         return dispatch({
             type: GET_ERROR,
@@ -178,7 +164,7 @@ export const deleteExperience = (id) => async dispatch => {
             type: GET_PROFILE,
             payload: newProfile
         })
-        console.log(newProfile);
+
     } catch (error) {
         dispatch({
             type: GET_ERROR,
@@ -214,7 +200,7 @@ export const deleteEducation = (id) => async dispatch => {
             type: GET_PROFILE,
             payload: newProfile
         })
-        console.log(newProfile);
+
     } catch (error) {
         dispatch({
             type: GET_ERROR,

@@ -141,6 +141,27 @@ const commentPost = async (req, res) => {
     }
 }
 
+//delete comment from post
+const deleteComment = async (req, res) => {
+    try {
+        const post = await Post.findById(req.params.id)
+        if (post.comments.filter(comment => comment._id.toString() === req.params.comment_id).length == 0) {
+            return res.status(400).json({
+                message: 'comment does not exist'
+            })
+        }
+        const removeIndex = post.comments.map(comment => comment._id.toString()).indexOf(req.params.comment_id)
+        post.comments.splice(removeIndex, 1)
+        const newPost = await post.save()
+        res.status(200).json(newPost)
+    } catch (error) {
+        res.status(400).json({
+            message: "no post found"
+        })
+    }
+}
+
+
 module.exports = {
     createPost,
     getPost,
@@ -148,5 +169,6 @@ module.exports = {
     deletePost,
     likePost,
     unlikePost,
-    commentPost
+    commentPost,
+    deleteComment
 }

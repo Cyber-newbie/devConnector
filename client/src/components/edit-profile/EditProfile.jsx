@@ -10,7 +10,7 @@ import { connect } from "react-redux";
 let render = 0;
 const EditProfile = (props) => {
   const navigate = useNavigate();
-  const { profile, profileExist } = props.profile;
+
   const { getCurrentProfile } = props;
   const [errors, setErrors] = useState({ ...props.error });
   const [useProfile, setUseProfile] = useState({ ...props.profile.profile });
@@ -23,7 +23,6 @@ const EditProfile = (props) => {
     if (props.profile.profile) {
       //make a copy of profile
       const oldProfile = props.profile.profile;
-      console.log(oldProfile.profile);
       // join the skill array as comma separated
       const skillsCSV = oldProfile.skills.join(",");
       const updatedProfile = {
@@ -44,28 +43,16 @@ const EditProfile = (props) => {
         instagram: !isEmpty(oldProfile.instagram) ? oldProfile.instagram : "",
       };
       setUseProfile({ ...updatedProfile });
-      //   console.log(
-      //     `props profile recieved ${JSON.stringify(useProfile.handle)}`
-      //   );
     }
   }, [props.profile]);
   useEffect(() => {
     render = render + 1;
-    console.log(`render count ${render}`);
-    console.log(errors);
+
     if (props.error) {
       setErrors((prevErrors) => ({ ...prevErrors, ...props.error }));
-      console.log("setting error");
     }
   }, [props.error]);
 
-  //   useEffect(() => {
-  //     console.log("profile exist ?");
-  //     if (profileExist) {
-  //       navigate("/dashboard");
-  //     }
-  //   }, [profileExist]);
-  //   console.log(useProfile.profile.handle);
   const handle = useRef(null);
   const company = useRef(null);
   const website = useRef(null);
@@ -84,7 +71,6 @@ const EditProfile = (props) => {
 
   const handleHandler = (e) => {
     handle.current.value = e.target.value;
-    console.log(handle.current.value);
   };
 
   const companyHandler = (e) => {
@@ -141,7 +127,6 @@ const EditProfile = (props) => {
 
   const submitHandler = (e) => {
     e.preventDefault();
-    console.log("submit");
 
     const profileData = {
       handle: handle.current.value,
@@ -162,8 +147,6 @@ const EditProfile = (props) => {
     props.createProfile(profileData);
 
     navigate("/dashboard");
-    console.log(profile);
-    console.log(`component errors ${Object.keys(errors)}`);
   };
 
   // Select options for status
@@ -235,7 +218,7 @@ const EditProfile = (props) => {
       </div>
     );
   }
-  console.log(useProfile);
+
   return (
     <div className="create-profile">
       <div className="container">

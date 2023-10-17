@@ -9,7 +9,6 @@ const Landing = (props) => {
     if (isAuthenticated) {
       navigate("/dashboard");
     }
-    console.log(isAuthenticated);
   }, [isAuthenticated]);
 
   return (

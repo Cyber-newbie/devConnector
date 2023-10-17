@@ -1,6 +1,7 @@
 import {
     GET_ERROR,
-    SET_CURRENT_USER
+    SET_CURRENT_USER,
+    CLEAR_ERROR
 } from "../type";
 import jwt_decode from 'jwt-decode'
 export const registerUser = (userData, navigate) => async dispatch => {
@@ -14,9 +15,16 @@ export const registerUser = (userData, navigate) => async dispatch => {
         body: JSON.stringify(userData),
         // mode: "no-cors",
     });
-    const created = await user.json()
-    console.log(created);
-    if (created.name === "name is required" || created.email === "email is required" || created.password === "password is required") {
+    if (user.ok) {
+        await user.json()
+        dispatch({
+            type: CLEAR_ERROR
+        })
+        return navigate("/login")
+    }
+    // (created.name === "name is required" || created.email === "email is required" || created.password === "password is required")
+    else {
+        const created = await user.json()
         return dispatch({
             type: GET_ERROR,
             payload: created
@@ -24,12 +32,12 @@ export const registerUser = (userData, navigate) => async dispatch => {
         })
     }
 
-    navigate("/login")
+
 
 }
 
 export const loginUser = userData => async dispatch => {
-    console.log('logging');
+
     const user = await fetch("http://localhost:5000/api/users/login", {
         method: "POST",
         headers: {
@@ -40,19 +48,22 @@ export const loginUser = userData => async dispatch => {
         body: JSON.stringify(userData),
         // mode: "no-cors",
     })
-    const loggedUser = await user.json()
-    console.log(loggedUser);
-    const {
-        token
-    } = loggedUser
-    if (token) {
+    if (user.ok) {
+        const loggedUser = await user.json()
+        const {
+            token
+        } = loggedUser
         //set token in ls
         localStorage.setItem('jwtToken', token)
         // decode token
         const decoded = jwt_decode(token)
         //set current user
         dispatch(setCurrentUser(decoded))
+        dispatch({
+            type: CLEAR_ERROR
+        })
     } else {
+        const loggedUser = await user.json()
         dispatch({
             type: GET_ERROR,
             payload: loggedUser

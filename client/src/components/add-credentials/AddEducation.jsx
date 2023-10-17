@@ -22,7 +22,6 @@ function AddEducation(props) {
   useEffect(() => {
     if (props.error) {
       setErrors((prevErrors) => ({ ...prevErrors, ...props.error }));
-      console.log("setting error");
     }
   }, [props.error]);
 
@@ -58,7 +57,6 @@ function AddEducation(props) {
   const onCheck = (e) => {
     setCurrent((prevState) => !prevState);
     setDisabled((prevState) => !prevState);
-    console.log(current);
   };
 
   const descriptionHandler = (e) => {
@@ -78,7 +76,6 @@ function AddEducation(props) {
     };
 
     props.addEducation(addEdu, navigate);
-    console.log(addEdu);
   };
 
   return (

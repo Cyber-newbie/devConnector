@@ -3,13 +3,12 @@ import {
     CLEAR_ERROR,
     DELETE_POST,
     GET_ERROR,
+    GET_POST,
     GET_POSTS,
     POST_LOADING
 } from "../type"
 
 export const addPost = (postData) => async dispatch => {
-    console.log(postData);
-
     const post = await fetch("http://localhost:5000/api/posts", {
         method: "POST",
         headers: {
@@ -65,6 +64,33 @@ export const getPosts = () => async dispatch => {
 
 
 }
+
+//get specific post from post feed
+
+export const getPost = (id) => async dispatch => {
+
+    setLoading()
+    const posts = await fetch(`http://localhost:5000/api/posts/${id}`)
+    if (posts.ok) {
+        const newPost = await posts.json()
+        dispatch({
+            type: GET_POST,
+            payload: newPost
+        })
+        dispatch({
+            type: CLEAR_ERROR
+        })
+    } else {
+
+        dispatch({
+            type: GET_POST,
+            payload: null
+        })
+    }
+
+
+}
+
 
 
 //delete post from post feed
@@ -155,6 +181,68 @@ export const removeLike = (id) => async dispatch => {
 
 }
 
+//add comment to post
+export const addComment = (postId, commentData) => async dispatch => {
+
+    const post = await fetch(`http://localhost:5000/api/posts/comment/${postId}`, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+            Authorization: localStorage.jwtToken
+        },
+        body: JSON.stringify(commentData)
+    })
+    if (post.ok) {
+
+        const newPost = await post.json()
+        dispatch({
+            type: GET_POST,
+            payload: newPost
+        })
+        dispatch({
+            type: CLEAR_ERROR
+        })
+    } else {
+        const errorData = await post.json();
+        dispatch({
+            type: GET_ERROR,
+            payload: errorData
+        })
+    }
+
+}
+
+//delete comment from post
+export const deleteComment = (postId, commentId) => async dispatch => {
+
+    setLoading()
+    const posts = await fetch(`http://localhost:5000/api/posts/comment/${postId}/${commentId}`, {
+        method: "DELETE",
+        headers: {
+            "Content-Type": "application/json",
+            Authorization: localStorage.jwtToken
+        }
+    })
+    if (posts.ok) {
+        const response = await posts.json()
+
+        dispatch({
+            type: GET_POST,
+            payload: response
+        })
+        dispatch({
+            type: CLEAR_ERROR
+        })
+    } else {
+        const error = await posts.json()
+        dispatch({
+            type: GET_ERROR,
+            payload: error
+        })
+    }
+
+
+}
 
 //set post loading
 

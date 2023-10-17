@@ -4,10 +4,8 @@ import Moment from "react-moment";
 import { deleteEducation } from "../../actions/profileActions";
 function Education(props) {
   const deleteEducation = (id) => {
-    // console.log(`deleting ${id}`);
     props.deleteEducation(id);
   };
-  console.log(props.education);
   const education = props.education.map((edu) => {
     return (
       <tr key={edu._id}>

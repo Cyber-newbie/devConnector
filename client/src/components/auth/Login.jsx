@@ -1,31 +1,45 @@
 // import {Link} from 'react-router-dom'
 import { useRef } from "react";
-import { connect } from "react-redux";
+import { connect, useDispatch } from "react-redux";
 import { loginUser } from "../../actions/authActions";
-import { useState, useEffect, useMemo } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import isEmpty from "../../validation/is-empty";
 import TextFieldGroup from "../common/TextFieldGroup";
-let i = 0;
+import { CLEAR_ERROR } from "../../type";
+
 const Login = (props) => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const [errors, setErrors] = useState({ ...props.errors });
   const { isAuthenticated } = props.auth;
+
+  //on logging, check if the user is authenticated then navigate to dashboard
   useEffect(() => {
     if (isAuthenticated) {
-      console.log("navigating");
       navigate("/dashboard");
     }
-    // console.log(isAuthenticated);
-    console.log(i++);
-    // navigate("/dashboard");
   }, [isAuthenticated]);
+
+  //set redux errors to component state to show input error fields
+  useEffect(() => {
+    if (props.errors) {
+      setErrors((prevErrors) => ({ ...prevErrors, ...props.errors }));
+    }
+  }, [props.errors]);
+
+  //as component renders, clear up the component error state and redux error state
+  useEffect(() => {
+    dispatch({
+      type: CLEAR_ERROR,
+      payload: {},
+    });
+    setErrors({});
+  }, []);
 
   const emailInput = useRef(null);
   const pswInput = useRef(null);
-  const [errors, setErrors] = useState({});
 
   const emailHandler = (e) => {
-    console.log("handling");
     emailInput.current.value = e.target.value;
   };
 
@@ -34,23 +48,17 @@ const Login = (props) => {
   };
 
   const submitHandler = (e) => {
-    console.log("submitting");
     e.preventDefault();
     const userData = {
       email: emailInput.current.value,
       password: pswInput.current.value,
     };
-    // console.log(userData);
+
     props.loginUser(userData);
+    setErrors({});
     emailInput.current.value = "";
     pswInput.current.value = "";
-    console.log(!isEmpty());
-    if (props.error) {
-      setErrors({ ...props.error });
-    }
   };
-
-  const memoizedErrors = useMemo(() => errors, [errors]);
 
   return (
     <div className="login">
@@ -68,7 +76,7 @@ const Login = (props) => {
                 placeholder="Email"
                 ref={emailInput}
                 onChange={emailHandler}
-                error={memoizedErrors.email}
+                error={errors.email}
               />
 
               <TextFieldGroup
@@ -77,7 +85,7 @@ const Login = (props) => {
                 placeholder="password"
                 ref={pswInput}
                 onChange={pswdHandler}
-                error={memoizedErrors.password}
+                error={errors.password}
               />
 
               <input type="submit" className="btn btn-info btn-block mt-4" />
@@ -91,7 +99,7 @@ const Login = (props) => {
 
 const mapStateToProps = (state) => ({
   auth: state.auth,
-  error: state.errors,
+  errors: state.errors,
 });
 
 export default connect(mapStateToProps, { loginUser })(Login);

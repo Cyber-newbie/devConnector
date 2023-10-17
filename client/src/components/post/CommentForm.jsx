@@ -1,8 +1,9 @@
 import React, { useEffect, useRef, useState } from "react";
 import TextAreaFieldGroup from "../common/TextAreaFieldGroup";
 import { connect } from "react-redux";
-import { addPost } from "../../actions/postActions";
-const PostForm = (props) => {
+import { addComment } from "../../actions/postActions";
+const CommentForm = (props) => {
+  const { postId } = props;
   const text = useRef(null);
   const [errors, setErrors] = useState({ ...props.errors });
 
@@ -19,12 +20,12 @@ const PostForm = (props) => {
   const submitHandler = (e) => {
     e.preventDefault();
     let { user } = props.auth;
-    let postData = {
+    let commentData = {
       text: text.current.value,
       name: user.name,
       avatar: user.avatar,
     };
-    props.addPost(postData);
+    props.addComment(postId, commentData);
     setErrors({});
     text.current.value = "";
   };
@@ -32,12 +33,12 @@ const PostForm = (props) => {
   return (
     <div className="post-form mb-3">
       <div className="card card-info">
-        <div className="card-header bg-info text-white">Say Somthing...</div>
+        <div className="card-header bg-info text-white">Make a comment...</div>
         <div className="card-body">
           <form onSubmit={submitHandler}>
             <div className="form-group">
               <TextAreaFieldGroup
-                placeholder="Create a post"
+                placeholder="Reply to this post"
                 name="text"
                 ref={text}
                 onChange={changeHandler}
@@ -59,4 +60,4 @@ const mapStateToProps = (state) => ({
   errors: state.errors,
 });
 
-export default connect(mapStateToProps, { addPost })(PostForm);
+export default connect(mapStateToProps, { addComment })(CommentForm);

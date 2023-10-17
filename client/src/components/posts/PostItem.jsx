@@ -3,8 +3,14 @@ import { connect } from "react-redux";
 import classnames from "classnames";
 import { Link } from "react-router-dom";
 import { deletePost, addLike, removeLike } from "../../actions/postActions";
-const PostItem = ({ post, auth, deletePost, addLike, removeLike }) => {
-  let showActions = true;
+const PostItem = ({
+  post,
+  auth,
+  deletePost,
+  addLike,
+  removeLike,
+  showActions = true,
+}) => {
   const onDeleteClick = (id) => {
     deletePost(id);
   };

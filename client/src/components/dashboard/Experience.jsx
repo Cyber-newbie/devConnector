@@ -4,10 +4,9 @@ import Moment from "react-moment";
 import { deleteExperience } from "../../actions/profileActions";
 function Experience(props) {
   const deleteExperience = (id) => {
-    // console.log(`deleting ${id}`);
     props.deleteExperience(id);
   };
-  console.log(props.experience);
+
   const experience = props.experience.map((exp) => {
     return (
       <tr key={exp._id}>
